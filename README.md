@@ -15,3 +15,20 @@ In the letter, Paul is opposed to building new sculptures. He thinks that it wil
 ### GroupThink
 
 Groupthink is a phenomenon that, when people make decisions as a group, they always make one that against his own will because of pressure, which is always bad or irrational. In the speaking, the professor use his company's experience to explain it. Once, he, his boss and coworker thought that an up-to-date looking will help selling their product, so they made a meeting about it. At first, more than half of the workers agree with him, until a senior professor said that they need to focus on technique, no the apperance. Suddenly almost all the workers changed their mind, including his coworker. So this idea was abandoned. At last, their competitors chose to focus on the apperance, which result a big loss to their company.
+
+### Cars or Public transportations
+
+Mary is a volunteer of the after school's elementary school, and they plan to have a trip recently. At the beginning, she want to borrow a van as a transportation. But there is no van available for her. There are two solutions. First, she can choose to borrow cars from her friend, but by doing so, she need to borrow and to look for another drivers. She can also choose to use public transportations, but by doing so, she will have trouble supervising the childrens. I prefer the second choice, because it is more efficient, and do not need to worry about drivers. I also think that supervising childrens will improve one's managing skills.
+
+### Experiments on baby's Math ability
+
+Scientists learned that a baby as young as 5 month's old will have the basic arithmatic ability, such as 1 plus 1 is two. The experiments goes like this. First, they put a doll on the table in front of the baby. Then they down the screen so that it can not be seen. Then they put aonther dolls on the table, the baby now know that there should be 2 dolls behind the screen. But the scientist remove one secretly. When they roll up the sreen, the baby is surprised that there is only one doll on the table because they are staring at it! This experiment proves that even baby will have the basic arithmatic ability.
+
+### Recommend city to a foreign friend
+
+I would recommend my friend to the city of my university - Shang Hai. There are two main reasons. First, Shanghai is the most international city in my country. It has a lot of universities like mine, which consist of a considerable number of foreign students. Besides university, Shang Hai also have a lot of companies that have a lot of foreign workers. A more international city will provide a more pleasant atmosphere, in my point of view. Second, Shang Hai also has a plenty of places of interests. For example, the Shang Hai Bond, Tianzi Fang. There are also free libraries and parks for visitors to play around. It is really a good place to fufill one's life even for local people.
+
+### Course cancellation
+
+The school want to cancel the sculpture cources in art department because of the lack of student and the retirement of the only-one professor who teaches the cource. The woman thinks that is a bot loss towards the school. First, the lack of student is not a result of a lack of interests, but a lack of time. The students there have a lot of requirement. Their time is spend mostly on the struggling of meeting the requirements, so there is little time to choose a course like scupture class. Second, if the money matters, a part-time professor is a good choice, and there are a lot of teachers who has a second interested area, which includes sculptures. So the lack of teacher is not a problem
+
