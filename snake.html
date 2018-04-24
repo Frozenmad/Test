@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	svg{
+		float: left;
+	}
+	div{
+		float: none;
+	}
+</style>
+	<title>Snake</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+<svg id='main' width=800 height=600 viewBox='0 0 800 600'></svg>
+<script type="text/javascript">
+var svg = d3.select("#main");
+var height = 600,
+	width = 800,
+	padding = 20;
+var cData = (h,w,x,y) => ({h:h,w:w,x:x,y:y});
+var cDataFromIndex = (a,b) => ({h:padding,w:padding,x:a*padding,y:b*padding});
+var total = {x:width/padding,y:height/padding};
+var boolArr = [];
+var getItem = (a,b) => (a+b*total.x);
+var parseItem = (index) => ({iy:parseInt(index/total.x),ix:index-parseInt(index/total.x)*total.x});
+var sData = (x,y) => ({ix:x,iy:y});
+for(var i=0;i<total.y;i++)
+	for(var j=0;j<total.x;j++)
+		boolArr.push(cData(padding,padding,padding*j,padding*i));
+
+function createRect(father,cData,color){
+	return father.append('rect')
+		.attr('x',cData.x)
+		.attr('y',cData.y)
+		.attr('width',cData.w)
+		.attr('height',cData.h)
+		.attr('fill',color)
+}
+
+function createCircle(father,data,color,name){
+	name = name || 'circle'
+	color = color || 'blue'
+	return father.append('circle')
+		.attr('id',name+getItem(data.ix,data.iy))
+		.attr('cx',data.ix*padding+padding/2)
+		.attr('cy',data.iy*padding+padding/2)
+		.attr('r',8)
+		.attr('fill',color)
+}
+
+function deleteCircle(father,ix,iy,name){
+	name = name || 'circle'
+	father.select('#'+name+getItem(ix,iy)).remove();
+}
+
+var block = new Array();
+for(var i=0;i<total.x*total.y;i++) block.push(true);
+
+for(var i=0;i<total.x;i++){
+	block[getItem(i,0)] = false;
+	block[getItem(i,total.y-1)] = false;
+}
+
+for(var j=1;j<total.y-1;j++){
+	block[getItem(0,j)] = false;
+	block[getItem(total.x-1,j)] = false;
+}
+
+function createBlock(i,j){
+	block[getItem(i,j)] = false;
+}
+
+// create the map of block
+createBlock(35,1)
+createBlock(35,2)
+createBlock(35,3)
+createBlock(35,4)
+createBlock(35,5)
+createBlock(35,6)
+createBlock(36,6)
+createBlock(37,6)
+createBlock(38,6)
+createBlock(39,6)
+
+// create the map of block randomly
+function randIJ(){
+	var i = parseInt(Math.random()*total.x);
+	var j = parseInt(Math.random()*total.y);
+	return sData(i,j);	
+}
+
+function randBlock(num){
+	for(var u=0;u<num;u++){
+		var i = parseInt(Math.random()*total.x);
+		var j = parseInt(Math.random()*total.y);
+		createBlock(i,j);
+	}
+}
+
+randBlock(20);
+
+// draw the background with block
+var background = svg.append('g');
+background.selectAll('rect')
+	.data(boolArr)
+	.enter()
+	.append('rect')
+	.attr('x',function(d){return d.x})
+	.attr('y',function(d){return d.y})
+	.attr('width',function(d){return d.w})
+	.attr('height',function(d){return d.h})
+	.attr('fill',function(d,i){
+		var index = parseItem(i);
+		if(!block[i]) return 'black';
+		return 'green';
+	})
+	.attr('stroke','black')
+	.attr('stroke-width',0.5)
+
+// create the food array
+var food = new Array();
+var foodMap = svg.append('g').attr('id','foodMap');
+function addFood(ix,iy){
+	food.push(getItem(ix,iy));
+	createCircle(foodMap,sData(ix,iy),'blue','food');
+}
+function removeFood(index){
+	var tD = parseItem(food[index]);
+	food.splice(index,1);
+	deleteCircle(foodMap,tD.ix,tD.iy,'food');
+}
+for(var i=0;i<3;i++) {
+	var tmpData = randIJ();
+	addFood(tmpData.ix,tmpData.iy);
+}
+
+// create the snake array
+var snake = svg.append('g').attr('id','snake');
+function showSnake(data){
+	var tmp = data.map(function(d){return parseItem(d)});
+	snake.selectAll('circle').remove();
+	snake.selectAll('circle')
+		.data(tmp)
+		.enter()
+		.append('circle')
+		.attr('cx',function(d){return d.ix * padding + padding/2})
+		.attr('cy',function(d){return d.iy * padding + padding/2})
+		.attr('fill','red')
+		.attr('r',padding/2-1)
+		.attr('stroke','black')
+		.attr('stroke-width',2)
+}
+
+// whether the game begin
+var beginFlag;
+// origin snake data
+var snakeData = [getItem(4,4),getItem(4,5),getItem(4,6)];
+// origin snake orientation
+var orient = {x:1,y:0};
+
+function initSnake(){
+	snakeData = [getItem(4,4),getItem(4,5),getItem(4,6)];
+	orient = {x:1,y:0};
+	showSnake(snakeData);
+}
+
+initSnake();
+
+// get and set the orientation
+function sameOri(o1,o2){return o1.x==o2.x && o1.y == o2.y};
+
+function changeData(){
+	// function used to change data of snake and update them
+	var head = parseItem(snakeData[0]);
+	console.log(orient);
+	var newHead = getItem(head.ix+orient.x,head.iy+orient.y);
+	if(food.indexOf(newHead)==-1) snakeData.pop();
+	else{
+		removeFood(food.indexOf(newHead));
+		var tmpFood = randIJ();
+		addFood(tmpFood.ix,tmpFood.iy);
+	}
+	if(!block[newHead] || snakeData.indexOf(newHead)!=-1) {
+		alert('you have died!');
+		clearInterval(beginFlag);
+		return;
+	}
+	snakeData.splice(0,0,newHead);
+	showSnake(snakeData);
+}
+
+function begin(){
+	initSnake();
+	beginFlag = setInterval(changeData,500);
+}
+
+function end(){
+	beginFlag = clearInterval(beginFlag);
+}
+
+// listen to the key event
+document.onkeydown = function(event){
+	var e = event || window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode == 87){
+		if(sameOri(orient,{x:0,y:-1}) || sameOri(orient,{x:0,y:1})) return;
+		orient = {x:0,y:-1};
+		changeData();
+	}
+	if(e && e.keyCode == 83){
+		if(sameOri(orient,{x:0,y:-1}) || sameOri(orient,{x:0,y:1})) return;
+		orient = {x:0,y:1};
+		changeData();
+	}
+	if(e && e.keyCode == 65){
+		if(sameOri(orient,{x:1,y:0}) || sameOri(orient,{x:-1,y:0})) return;
+		orient = {x:-1,y:0};
+		changeData();
+	}
+	if(e && e.keyCode == 68){
+		if(sameOri(orient,{x:1,y:0}) || sameOri(orient,{x:-1,y:0})) return;
+		orient = {x:1,y:0};
+		changeData();
+	}
+}
+
+var startBegin = {x:0,y:0};
+
+d3.select(document)
+	.on('touchstart',function(e){
+		startBegin.x = d3.event.PageX;
+		startBegin.y = d3.event.PageY;
+	})
+	.on('touchend',function(e){
+		var xChange = d3.event.PageX - startBegin.x;
+		var yChange = d3.event.PageY - startBegin.y;
+		if(Math.abs(xChange) > Math.abs(yChange)){
+			if(sameOri(orient,{x:1,y:0}) || sameOri(orient,{x:-1,y:0})) return;
+			if(xChange > 0){
+				orient = {x:1,y:0};
+				changeData();
+			}
+			else{
+				orient = {x:-1,y:0};
+				changeData();
+			}
+		} else{
+			if(sameOri(orient,{x:0,y:1}) || sameOri(orient,{x:0,y:-1})) return;
+			if(yChange > 0){
+				orient = {x:0,y:1};
+				changeData();
+			}
+			else{
+				orient = {x:0,y:-1};
+				changeData();
+			}
+		}
+	})
+
+var newEl = svg.append('g');
+var begins = createRect(newEl,cDataFromIndex(37,2),'red');
+var ends = createRect(newEl,cDataFromIndex(37,4),'red');
+begins.on("click",begin);
+ends.on("click",end);
+
+</script>
+</body>
+</html>
